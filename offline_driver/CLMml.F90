@@ -16,7 +16,7 @@ program CLMml
   ! processes a single grid cell.
 
   !Let's make this OpenMP
-  call decompInit(ntower)
+  call decompInit
   !$OMP PARALLEL DO PRIVATE(bounds, nc) SCHEDULE(DYNAMIC)
   do nc = 1, nclumps
       call get_clump_bounds (nc, bounds)

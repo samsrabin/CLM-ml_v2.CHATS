@@ -30,11 +30,10 @@ module decompMod
 
 contains
   !Crude implementation of decompInit. No MPI
-  subroutine decompInit(nsite)
-    integer, intent(in) :: nsite
+  subroutine decompInit
     integer ::n
 
-    nclumps = nsite
+    nclumps = 1
     allocate(clumps(nclumps))
 
     do n=1, nclumps
