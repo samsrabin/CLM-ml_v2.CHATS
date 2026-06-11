@@ -6,8 +6,8 @@
 # To remove obj files and mod files: type 'make clean'
 # ###############################################
  
-LIB_NETCDF = $(NETCDF_PATH)/lib
-MOD_NETCDF = $(NETCDF_PATH)/include
+LIB_NETCDF = $(NCAR_LDFLAGS_NETCDF)
+MOD_NETCDF = $(NCAR_INC_NETCDF)
  
 # Source code directories
  
