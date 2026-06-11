@@ -9,16 +9,44 @@ module decompMod
   use shr_kind_mod, only : r8 => shr_kind_r8
   implicit none
 
-  type bounds_type
+  !Adding nclumps
+  integer, public :: nclumps
+  type, public :: bounds_type
      integer :: begg, endg       ! Beginning and ending gridcell index
      integer :: begl, endl       ! Beginning and ending landunit index
      integer :: begc, endc       ! Beginning and ending column index
      integer :: begp, endp       ! Beginning and ending patch index
   end type bounds_type
-  public bounds_type
+  
+  type, public :: clump_type
+    integer :: begg, endg
+    integer :: begl, endl
+    integer :: begc, endc
+    integer :: begp, endp
+  end type clump_type
+
+  type(clump_type), public, allocatable :: clumps(:)
+  !public bounds_type
 
 contains
+  !Crude implementation of decompInit. No MPI
+  subroutine decompInit(nsite)
+    integer, intent(in) :: nsite
+    integer ::n
 
+    nclumps = nsite
+    allocate(clumps(nclumps))
+
+    do n=1, nclumps
+      clumps(n)%begg = n; clumps(n)%endg = n
+      clumps(n)%begl = n; clumps(n)%endl = n
+      clumps(n)%begc = n; clumps(n)%endc = n
+      clumps(n)%begp = n; clumps(n)%endp = n
+    end do
+  end subroutine decompInit
+
+
+  !only for 1 site --use OMP in another loop
   subroutine get_clump_bounds (n, bounds)
 
     implicit none
@@ -32,18 +60,23 @@ contains
     ! that a grid cell has one land unit with one column and one patch. It
     ! processes a single grid cell.
 
-    bounds%begg = 1
-    bounds%endg = 1
-
-    bounds%begl = 1
-    bounds%endl = 1
-
-    bounds%begc = 1
-    bounds%endc = 1
-
-    bounds%begp = 1
-    bounds%endp = 1
+    bounds%begg = clumps(n)%begg
+    bounds%endg = clumps(n)%endg
+    bounds%begl = clumps(n)%begl
+    bounds%endl = clumps(n)%endl
+    bounds%begc = clumps(n)%begc
+    bounds%endc = clumps(n)%endc
+    bounds%begp = clumps(n)%begp
+    bounds%endp = clumps(n)%endp
 
   end subroutine get_clump_bounds
+
+  subroutine get_proc_bounds(bounds)
+    type(bounds_type), intent(out) :: bounds
+    bounds%begg =1 ; bounds%endg = nclumps
+    bounds%begl =1 ; bounds%endl = nclumps
+    bounds%begc =1 ; bounds%endc = nclumps 
+    bounds%begp =1 ; bounds%endp = nclumps
+  end subroutine get_proc_bounds
 
 end module decompMod

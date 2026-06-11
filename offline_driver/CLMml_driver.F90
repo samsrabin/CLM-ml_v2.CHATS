@@ -27,7 +27,7 @@ module CLMml_driver
 contains
 
   !-----------------------------------------------------------------------
-  subroutine CLMml_drv (bounds)
+  subroutine CLMml_drv (bounds, isite)
     !
     ! !DESCRIPTION:
     ! Model driver to process the tower site and year
@@ -50,6 +50,7 @@ contains
     ! !ARGUMENTS:
     implicit none
     type(bounds_type), intent(in) :: bounds
+    integer, intent(in) :: isite
     !
     ! !LOCAL VARIABLES:
     real(r8) :: obliq, mvelp                   ! Miscellaneous orbital parameters (not used)

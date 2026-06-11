@@ -29,7 +29,7 @@ prgm = prgm.exe
 
 # Fortran 95 compiler
 
-cmplr = nvfortran -C -Minform=inform -Ktrap=fp -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L/usr/lib64
+cmplr = nvfortran -mp -C -Minform=inform -Ktrap=fp -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L/usr/lib64
 #cmplr = nvfortran -O2 -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L/usr/lib64
 
 # Specify module files (that all other files use). Order matters, because some files
