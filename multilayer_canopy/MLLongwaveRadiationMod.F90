@@ -148,12 +148,14 @@ contains
 
        do ic = nbot(p), ntop(p)
 
-         write(*,*) 'emleaf(patch%itype(p)) = ', emleaf(patch%itype(p))
-         write(*,*) 'sb = ', sb
-         write(*,*) 'p = ', p
-         write(*,*) 'ic = ', ic
-         write(*,*) 'isun = ', isun
-         write(*,*) 'tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
+          if (tleaf(p,ic,isun) > 1.E+50) then
+             write(*,*) 'emleaf(patch%itype(p)) = ', emleaf(patch%itype(p))
+             write(*,*) 'sb = ', sb
+             write(*,*) 'p = ', p
+             write(*,*) 'ic = ', ic
+             write(*,*) 'isun = ', isun
+             write(*,*) 'tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
+          end if
           lw_source_sun = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isun)**4
           lw_source_sha = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isha)**4
           lw_source(ic) = (lw_source_sun * fracsun(p,ic) + lw_source_sha * (1._r8 - fracsun(p,ic))) &
