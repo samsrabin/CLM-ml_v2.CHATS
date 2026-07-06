@@ -45,6 +45,7 @@ module MLRungeKuttaMod
     integer  :: p                       ! Patch index for CLM g/l/c/p hierarchy
     integer  :: ic                      ! Aboveground layer index
     integer  :: j                       ! Runge-Kutta step index
+    real :: ssrts_var
     !---------------------------------------------------------------------
 
     associate ( &
@@ -167,10 +168,12 @@ module MLRungeKuttaMod
              write(*,*) 'SSRts RungeKuttaUpdate N:'
              write(*,*) '   tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
              write(*,*) '   tleaf(p,ic,isha) = ', tleaf(p,ic,isha)
-             if (abs(tleaf(p,ic,isun)) .gt. 1.E+50 .or. abs(tleaf(p,ic,isha)) .gt. 1.E+50) then
+             if (tleaf(p,ic,isun) .gt. 1.E+50) then
+                write(*,*) 'SSRts ????????????'
                 call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
                 call abort
              end if
+             ssrts_var = tleaf(p,ic,isun)**4
           end if
 
        end do
