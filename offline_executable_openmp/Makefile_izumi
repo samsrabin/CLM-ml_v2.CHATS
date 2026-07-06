@@ -27,17 +27,10 @@ O = obj
 
 prgm = prgm.exe
 
-#GCC Compiler (OpenMP -- -fopenmp enabled)
-#cmplr = gfortran -O0 -g -fbacktrace -fopenmp -fcheck=all -Wall -ffpe-trap=zero,invalid,overflow -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L$(HOME)/usr/lib64
-
 #Intel Compiler (OpenMP -- -qopenmp enabled)
-#cmplr = ifx -O0 -g -traceback -qopenmp -check all -warn all -fpe0 -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L$(HOME)/usr/lib64
-cmplr = ifx -O0 -g -traceback -qopenmp -check all -warn all -fpe0 -L$(LIB_NETCDF) -I$(MOD_NETCDF) -L$(HOME)/usr/lib64 -lnetcdff -qmkl -lm
+cmplr = ifort -O0 -g -traceback -qopenmp -check all -warn all -fpe0 -L$(HOME)/usr/lib64 -lnetcdff -qmkl -lm -L/usr/local/netcdf-c-4.7.4-f-4.5.2-intel-cluster-20.0.1/lib -lnetcdff -lnetcdf /usr/local/netcdf-c-4.7.4-f-4.5.2-intel-cluster-20.0.1/lib/libnetcdff.a -I/usr/local/netcdf-c-4.7.4-f-4.5.2-intel-cluster-20.0.1/include
 # Fortran 95 compiler (OpenMP -- -mp enabled)
 
-#cmplr = nvfortran -O0 -g -mp -traceback -C -Minform=inform -Ktrap=fp -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L$(HOME)/usr/lib64
-
-#cmplr = nvfortran -O2 -mp -L$(LIB_NETCDF) -I$(MOD_NETCDF) -lnetcdff -lblas -lm -L/usr/lib64
 
 # Specify module files (that all other files use). Order matters, because some files
 # are used by other files in mods list
