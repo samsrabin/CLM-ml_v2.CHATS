@@ -105,12 +105,22 @@ contains
     soilstate_inst, waterstatebulk_inst)
 
     ! CLMml: Multilayer canopy and soil fluxes
+    
+    if (mlcanopy_inst%tleaf_leaf(1,2,1) > 1E+50) then
+       write(*,*) 'SSRts before MLCanopyFluxes: tleaf_leaf(1,2,1)', mlcanopy_inst%tleaf_leaf(1,2,1)
+       call endrun (msg=' ERROR: tleaf unrealistically large')
+    end if
 
     call MLCanopyFluxes (bounds, filter%num_exposedvegp, filter%exposedvegp, &
     atm2lnd_inst, canopystate_inst, soilstate_inst, temperature_inst, &
     waterstatebulk_inst, waterfluxbulk_inst, &
     energyflux_inst, frictionvel_inst, surfalb_inst, solarabs_inst, &
     mlcanopy_inst, wateratm2lndbulk_inst, waterdiagnosticbulk_inst)
+    
+    if (mlcanopy_inst%tleaf_leaf(1,2,1) > 1E+50) then
+       write(*,*) 'SSRts after MLCanopyFluxes: tleaf_leaf(1,2,1)', mlcanopy_inst%tleaf_leaf(1,2,1)
+       call endrun (msg=' ERROR: tleaf unrealistically large')
+    end if
 
     ! Update CLM soil temperatures
 
