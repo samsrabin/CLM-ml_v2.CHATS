@@ -106,6 +106,20 @@ contains
             + cpleaf(p,ic) / dtime * tleaf_bef(p,ic,il)
        den = cpleaf(p,ic) / dtime + num1 + num2 * dqsat
        tleaf(p,ic,il) = (num1 * tair(p,ic) + num2 * eair(p,ic) / pref(p) + num3) / den
+       if (p==1 .and. ic==2 .and. il==1) then
+          write(*,*) 'SSRts LeafFluxes:'
+          write(*,*) '   num1 = ', num1
+          write(*,*) '   num2 = ', num2
+          write(*,*) '   num3 = ', num3
+          write(*,*) '   tair(p,ic) = ', tair(p,ic)
+          write(*,*) '   eair(p,ic) = ', eair(p,ic)
+          write(*,*) '   pref(p) = ', pref(p)
+          write(*,*) '   den = ', den
+          write(*,*) '   tleaf(p,ic,il) = ', tleaf(p,ic,il)
+          if (tleaf(p,ic,il) .gt. 1.E+50) then
+             call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
+          end if
+       end if
 
        ! Storage flux
 
