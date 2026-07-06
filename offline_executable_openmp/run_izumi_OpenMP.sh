@@ -34,4 +34,4 @@ echo "Running the executable with OpenMP..."
 
 export OMP_STACKSIZE=8G
 export OMP_NUM_THREADS=1
-stdbuf -oL -eL ./prgm.exe < nl.all_CHATS7.05.2007 > "$LOGFILE" 2>&1
+stdbuf -oL -eL ./prgm.exe < nl.CHATS7.05.2007 > "$LOGFILE" 2>&1
