@@ -169,6 +169,7 @@ module MLRungeKuttaMod
              write(*,*) '   tleaf(p,ic,isha) = ', tleaf(p,ic,isha)
              if (abs(tleaf(p,ic,isun)) .gt. 1.E+50 .or. abs(tleaf(p,ic,isha)) .gt. 1.E+50) then
                 call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
+                call abort
              end if
           end if
 
