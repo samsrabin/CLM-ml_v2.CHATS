@@ -658,15 +658,6 @@ module MLCanopyFluxesMod
 
           if (dpai(p,ic) > 0._r8) then
              tleaf(p,ic,isun) = tleaf(p,ic,isun) * fracsun(p,ic) + tleaf(p,ic,isha) * (1._r8 - fracsun(p,ic))
-
-             if (p==1 .and. ic==2 .and. isun==1) then
-                write(*,*) 'SSRts MLCanopyFluxes:'
-                write(*,*) '   tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
-                if (tleaf(p,ic,isun) .gt. 1.E+50) then
-                   call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
-                end if
-             end if
-
              tleaf(p,ic,isha) = tleaf(p,ic,isun)
              lwp(p,ic,isun) = lwp(p,ic,isun) * fracsun(p,ic) + lwp(p,ic,isha) * (1._r8 - fracsun(p,ic))
              lwp(p,ic,isha) = lwp(p,ic,isun)
