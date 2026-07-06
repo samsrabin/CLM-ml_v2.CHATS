@@ -105,8 +105,13 @@ module MLRungeKuttaMod
              write(*,*) 'SSRts RungeKuttaUpdate 1:'
              write(*,*) '   tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
              write(*,*) '   tleaf(p,ic,isha) = ', tleaf(p,ic,isha)
+             write(*,*) '   tleaf_bef(p,ic,isun) = ', tleaf_bef(p,ic,isun)
+             write(*,*) '   tleaf_bef(p,ic,isha) = ', tleaf_bef(p,ic,isha)
              if (abs(tleaf(p,ic,isun)) .gt. 1.E+50 .or. abs(tleaf(p,ic,isha)) .gt. 1.E+50) then
                 call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
+             end if
+             if (abs(tleaf_bef(p,ic,isun)) .gt. 1.E+50 .or. abs(tleaf_bef(p,ic,isha)) .gt. 1.E+50) then
+                call endrun (msg=' ERROR: LeafFluxes: tleaf_bef unrealistically large')
              end if
           end if
 
