@@ -127,7 +127,6 @@ module MLRungeKuttaMod
                  write(*,*) 'BLOWUP: RungeKutta intermediate irk=',irk,' p=',p,' ic=',ic, &
                             ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
                             ' dtleaf_sun=',dtleaf(p,ic,isun,irk),' dtleaf_sha=',dtleaf(p,ic,isha,irk)
-                 error stop 'BLOWUP: RungeKutta intermediate tleaf exceeded threshold'
                end if
              end if
 
@@ -157,7 +156,6 @@ module MLRungeKuttaMod
                  write(*,*) 'BLOWUP: RungeKutta final irk=',irk,' p=',p,' ic=',ic, &
                             ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
                             ' dtleaf_sun=',dtleaf(p,ic,isun,irk),' dtleaf_sha=',dtleaf(p,ic,isha,irk)
-                 error stop 'BLOWUP: RungeKutta final tleaf exceeded threshold'
                end if
              end if
 

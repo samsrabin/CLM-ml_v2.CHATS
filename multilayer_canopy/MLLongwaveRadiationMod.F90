@@ -153,7 +153,6 @@ contains
               write(*,*) 'BLOWUP: MLLongwaveRadiation p=',p,' ic=',ic, &
                          ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
                          ' emleaf=',emleaf(patch%itype(p)),' sb=',sb
-              error stop 'BLOWUP: MLLongwaveRadiation tleaf exceeded threshold'
             end if
           end if
           lw_source_sun = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isun)**4

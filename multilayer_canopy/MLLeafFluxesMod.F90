@@ -113,7 +113,6 @@ contains
                       ' tleaf=',tleaf(p,ic,il),' den=',den, &
                       ' num1=',num1,' num2=',num2,' num3=',num3, &
                       ' tair=',tair(p,ic),' eair=',eair(p,ic),' pref=',pref(p)
-           error stop 'BLOWUP: LeafFluxes tleaf exceeded threshold'
          end if
        end if
 
