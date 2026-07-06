@@ -148,13 +148,12 @@ contains
 
        do ic = nbot(p), ntop(p)
 
-          if (p == 1 .and. ic == 2) then
-            if (abs(tleaf(p,ic,isun)) >= 1.e10_r8 .or. abs(tleaf(p,ic,isha)) >= 1.e10_r8) then
-              write(*,*) 'BLOWUP: MLLongwaveRadiation p=',p,' ic=',ic, &
-                         ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
-                         ' emleaf=',emleaf(patch%itype(p)),' sb=',sb
-            end if
-          end if
+         write(*,*) 'emleaf(patch%itype(p)) = ', emleaf(patch%itype(p))
+         write(*,*) 'sb = ', sb
+         write(*,*) 'p = ', p
+         write(*,*) 'ic = ', ic
+         write(*,*) 'isun = ', isun
+         write(*,*) 'tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
           lw_source_sun = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isun)**4
           lw_source_sha = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isha)**4
           lw_source(ic) = (lw_source_sun * fracsun(p,ic) + lw_source_sha * (1._r8 - fracsun(p,ic))) &

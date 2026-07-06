@@ -122,13 +122,6 @@ module MLRungeKuttaMod
                 lwp(p,ic,isun) = lwp(p,ic,isun) + a(irk+1,j) * dlwp(p,ic,isun,j)
                 lwp(p,ic,isha) = lwp(p,ic,isha) + a(irk+1,j) * dlwp(p,ic,isha,j)
              end do
-             if (p == 1 .and. ic == 2) then
-               if (abs(tleaf(p,ic,isun)) >= 1.e10_r8 .or. abs(tleaf(p,ic,isha)) >= 1.e10_r8) then
-                 write(*,*) 'BLOWUP: RungeKutta intermediate irk=',irk,' p=',p,' ic=',ic, &
-                            ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
-                            ' dtleaf_sun=',dtleaf(p,ic,isun,irk),' dtleaf_sha=',dtleaf(p,ic,isha,irk)
-               end if
-             end if
 
           else if (irk == nrk) then
 
@@ -151,13 +144,6 @@ module MLRungeKuttaMod
                 lwp(p,ic,isun) = lwp(p,ic,isun) + b(j) * dlwp(p,ic,isun,j)
                 lwp(p,ic,isha) = lwp(p,ic,isha) + b(j) * dlwp(p,ic,isha,j)
              end do
-             if (p == 1 .and. ic == 2) then
-               if (abs(tleaf(p,ic,isun)) >= 1.e10_r8 .or. abs(tleaf(p,ic,isha)) >= 1.e10_r8) then
-                 write(*,*) 'BLOWUP: RungeKutta final irk=',irk,' p=',p,' ic=',ic, &
-                            ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
-                            ' dtleaf_sun=',dtleaf(p,ic,isun,irk),' dtleaf_sha=',dtleaf(p,ic,isha,irk)
-               end if
-             end if
 
           end if
 

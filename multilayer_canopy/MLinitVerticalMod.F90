@@ -391,6 +391,7 @@ contains
           cair(p,ic) = forc_pco2(g) / forc_pbot(c) * 1.e06_r8
 
           tleaf(p,ic,isun) = forc_t(c) ; tleaf(p,ic,isha) = forc_t(c)
+          write(*,*) 'initVerticalProfiles: p=',p,' ic=',ic,' tleaf=',tleaf(p,ic,isun)
           lwp(p,ic,isun) = -0.1_r8 ; lwp(p,ic,isha) = -0.1_r8
           h2ocan(p,ic) = 0._r8
        end do
