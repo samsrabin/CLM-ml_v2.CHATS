@@ -101,6 +101,15 @@ module MLRungeKuttaMod
 
           ! Update state variables
 
+          if (p==1 .and. ic==2 .and. (isun==1 .or. isha==1)) then
+             write(*,*) 'SSRts RungeKuttaUpdate 1:'
+             write(*,*) '   tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
+             write(*,*) '   tleaf(p,ic,isha) = ', tleaf(p,ic,isha)
+             if (tleaf(p,ic,isun) + tleaf(p,ic,isha) .gt. 1.E+50) then
+                call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
+             end if
+          end if
+
           if (irk < nrk) then
 
              ! Intermediate state update for Runge-Kutta step irk+1 using derivatives from steps 1, ..., irk
@@ -145,6 +154,17 @@ module MLRungeKuttaMod
                 lwp(p,ic,isha) = lwp(p,ic,isha) + b(j) * dlwp(p,ic,isha,j)
              end do
 
+          end if
+          
+          
+
+          if (p==1 .and. ic==2 .and. (isun==1 .or. isha==1)) then
+             write(*,*) 'SSRts RungeKuttaUpdate N:'
+             write(*,*) '   tleaf(p,ic,isun) = ', tleaf(p,ic,isun)
+             write(*,*) '   tleaf(p,ic,isha) = ', tleaf(p,ic,isha)
+             if (tleaf(p,ic,isun) + tleaf(p,ic,isha) .gt. 1.E+50) then
+                call endrun (msg=' ERROR: LeafFluxes: tleaf unrealistically large')
+             end if
           end if
 
        end do
