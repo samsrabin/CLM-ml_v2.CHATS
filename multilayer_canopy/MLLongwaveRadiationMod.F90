@@ -148,14 +148,13 @@ contains
 
        do ic = nbot(p), ntop(p)
 
-          if (abs(tleaf(p,ic,isun)) >= 1.e10_r8 .or. abs(tleaf(p,ic,isha)) >= 1.e10_r8) then
-            write(*,*) 'BLOWUP: MLLongwaveRadiation p=',p,' ic=',ic, &
-                       ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
-                       ' emleaf=',emleaf(patch%itype(p)),' sb=',sb
-            block
-              real(r8) :: tmp
-              tmp = 1.0e300_r8 * 1.0e300_r8
-            end block
+          if (p == 1 .and. ic == 2) then
+            if (abs(tleaf(p,ic,isun)) >= 1.e10_r8 .or. abs(tleaf(p,ic,isha)) >= 1.e10_r8) then
+              write(*,*) 'BLOWUP: MLLongwaveRadiation p=',p,' ic=',ic, &
+                         ' tleaf_sun=',tleaf(p,ic,isun),' tleaf_sha=',tleaf(p,ic,isha), &
+                         ' emleaf=',emleaf(patch%itype(p)),' sb=',sb
+              error stop 'BLOWUP: MLLongwaveRadiation tleaf exceeded threshold'
+            end if
           end if
           lw_source_sun = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isun)**4
           lw_source_sha = emleaf(patch%itype(p)) * sb * tleaf(p,ic,isha)**4

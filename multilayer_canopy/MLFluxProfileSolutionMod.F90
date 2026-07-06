@@ -450,19 +450,6 @@ contains
 
     call tridiag_2eq (a1, b11, b12, c1, d1, a2, b21, b22, c2, d2, tair(p,:), eair(p,:), ncan(p))
 
-    ! --- BLOWUP guard: check tridiag_2eq outputs before they propagate to tleaf ---
-    do ic = 1, ncan(p)
-      if (abs(tair(p,ic)) >= 1.e10_r8 .or. abs(eair(p,ic)) >= 1.e10_r8) then
-        write(*,*) 'BLOWUP: tridiag_2eq output p=',p,' ic=',ic, &
-                   ' tair=',tair(p,ic),' eair=',eair(p,ic)
-        block
-          real(r8) :: tmp
-          tmp = 1.0e300_r8 * 1.0e300_r8
-        end block
-      end if
-    end do
-    ! -------------------------------------------------------------------------------
-
     ! Soil surface temperature (K) and vapor pressure (mol/mol)
 
     t0 = alpha0 * tair(p,1) + beta0 * eair(p,1) + delta0
