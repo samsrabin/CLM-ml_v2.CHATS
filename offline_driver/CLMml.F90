@@ -11,12 +11,19 @@ program CLMml
   use clmDataMod,         only : prefill_clm, prefill_factor
   use clmSoilOptionMod,   only : clm_phys
   use clm_varpar,         only : clm_varpar_init
+  use omp_lib,            only : omp_get_wtime
   implicit none
-  integer :: nc
+
+  integer,  parameter :: nreps = 3
+  integer :: nc, irep
+  double precision :: t_total_start, t_io_start, t_io_end
+  double precision :: t_comp_start, t_comp_end
+  double precision :: t_comp(nreps), comp_mean, comp_std, comp_sq
 
   type(bounds_type)        :: bounds
   type(tower_config_type)  :: configs(ntower)
 
+  t_total_start = omp_get_wtime()
   write (*,*) "Starting Run!"
 
   ! Read all ntower namelist blocks from stdin sequentially, before any threads start.
@@ -38,6 +45,7 @@ program CLMml
 
   ! Pre-read all tower met forcing into memory before the parallel region so
   ! that readTowerMet never calls netCDF from inside an OMP thread.
+  t_io_start = omp_get_wtime()
   allocate (forcing(ntower))
   do nc = 1, ntower
     call prefill_tower_met(configs(nc)%fin_tower, configs(nc)%ntim, forcing(nc))
@@ -48,13 +56,43 @@ program CLMml
       call prefill_factor(configs(nc)%fin_soil_adjust, forcing(nc))
   end do
   use_buffer = .true.
+  t_io_end = omp_get_wtime()
+  write(*,'(a,f10.3,a)') 'I/O pre-read phase:  ', t_io_end - t_io_start, ' s'
 
-  !$OMP PARALLEL DO PRIVATE(bounds, nc) SCHEDULE(DYNAMIC) COPYIN(clm_initialized)
-  do nc = 1, ntower
-    end if
-    call get_clump_bounds(nc, bounds)
-    call CLMml_drv(bounds, configs(nc))
+  ! Run all towers nreps times; output files are overwritten each rep but the
+  ! final result is identical to a single run.
+  do irep = 1, nreps
+    write(*,'(a,i0,a,i0,a)') '--- Compute rep ', irep, ' of ', nreps, ' ---'
+    t_comp_start = omp_get_wtime()
+
+    !$OMP PARALLEL DO PRIVATE(bounds, nc) SCHEDULE(DYNAMIC) COPYIN(clm_initialized)
+    do nc = 1, ntower
+      call get_clump_bounds(nc, bounds)
+      call CLMml_drv(bounds, configs(nc))
+    end do
+    !$OMP END PARALLEL DO
+
+    t_comp_end = omp_get_wtime()
+    t_comp(irep) = t_comp_end - t_comp_start
+    write(*,'(a,i0,a,f10.3,a)') '  Rep ', irep, ' wall time: ', t_comp(irep), ' s'
   end do
-  !$OMP END PARALLEL DO
+
+  ! Sample mean and std (n-1 denominator)
+  comp_mean = sum(t_comp) / dble(nreps)
+  comp_sq   = 0.0d0
+  do irep = 1, nreps
+    comp_sq = comp_sq + (t_comp(irep) - comp_mean)**2
+  end do
+  comp_std = sqrt(comp_sq / dble(nreps - 1))
+
+  write(*,*)
+  write(*,*) '=== Timing Summary ==='
+  write(*,'(a,f10.3,a)') 'I/O pre-read:         ', t_io_end - t_io_start, ' s'
+  do irep = 1, nreps
+    write(*,'(a,i0,a,f10.3,a)') 'Compute rep ', irep, ':        ', t_comp(irep), ' s'
+  end do
+  write(*,'(a,f10.3,a)') 'Compute mean:         ', comp_mean, ' s'
+  write(*,'(a,f10.3,a)') 'Compute std (sample): ', comp_std, ' s'
+  write(*,'(a,f10.3,a)') 'Total wall time:      ', omp_get_wtime() - t_total_start, ' s'
 
 end program CLMml
